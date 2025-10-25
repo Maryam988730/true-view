@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Product Review Hub</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+
+    :root {
+      --bg: #f9fafb;
+      --card: #fff;
+      --accent: #2563eb;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --radius: 10px;
+      --shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+    }
+
+    * { box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .app { width: 100%; max-width: 1000px; }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 30px;
+    }
+
+    .logo h1 { margin: 0; font-size: 1.5rem; color: var(--accent); }
+
+    .search-wrap {
+      display: flex;
+      align-items: center;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 8px 12px;
+      width: 60%;
+      box-shadow: var(--shadow);
+    }
+
+    .search-wrap input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 1rem;
+    }
+
+    .search-btn {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 8px 14px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .profile-menu {
+      position: absolute;
+      right: 0;
+      top: 55px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      display: none;
+    }
+
+    .profile-menu.active { display: block; }
+
+    .profile-menu button {
+      background: none;
+      border: none;
+      width: 100%;
+      padding: 10px 16px;
+      text-align: left;
+      cursor: pointer;
+      color: var(--text);
+    }
+
+    .profile-menu button:hover { background: #f3f4f6; }
+
+    .genres {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    .genre {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .genre:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+
+    .genre.active { border-color: var(--accent); }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 20px;
+      border: 1px solid var(--border);
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h3 { margin: 0 0 6px 0; }
+
+    .meta {
+      font-size: 0.9rem;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .rating {
+      background: #f3f4f6;
+      padding: 4px 8px;
+      border-radius: 6px;
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    footer { text-align: center; color: var(--muted); margin-top: 40px; }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="logo"><h1>Product Reviews</h1></div>
+      <div class="search-wrap">
+        <input id="searchInput" placeholder="Search products..." />
+        <button class="search-btn" id="searchBtn">Search</button>
+      </div>
+      <div class="profile">
+        <div id="avatarBtn" class="avatar">U</div>
+        <div id="profileMenu" class="profile-menu">
+          <button>My Profile</button>
+          <button>Settings</button>
+          <button>Logout</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="genres" id="genresList"></section>
+      <section id="results"></section>
+      <footer>© 2025 Product Review Hub</footer>
+    </main>
+  </div>
+
+  <script>
+    const PRODUCTS = [
+      {id:1,name:'Smartphone X200',brand:'TechCorp',genre:'Electronics',rating:4.6,ratingsCount:245,desc:'High-end smartphone with excellent camera and performance.'},
+      {id:2,name:'Luxe Skin Serum',brand:'GlowCo',genre:'Cosmetics',rating:4.4,ratingsCount:182,desc:'Hydrating serum that improves skin texture and radiance.'},
+      {id:3,name:'Noise-Cancel 500',brand:'AudioMax',genre:'Electronics',rating:4.7,ratingsCount:310,desc:'Over-ear headphones with deep bass and noise cancellation.'},
+      {id:4,name:'Ergo Chair Pro',brand:'SitWell',genre:'Furniture',rating:4.5,ratingsCount:127,desc:'Adjustable ergonomic office chair with lumbar support.'},
+      {id:5,name:'FreshClean Toothbrush',brand:'SmilePro',genre:'Personal Care',rating:4.2,ratingsCount:98,desc:'Electric toothbrush with smart timer and long battery life.'},
+      {id:6,name:'PureBlend Mixer',brand:'HomeEase',genre:'Appliances',rating:4.3,ratingsCount:156,desc:'Durable kitchen blender with multiple speed settings.'}
+    ];
+
+    const genreCounts = PRODUCTS.reduce((acc, p) => { acc[p.genre] = (acc[p.genre] || 0) + 1; return acc; }, {});
+    const genres = Object.keys(genreCounts);
+
+    const genresList = document.getElementById('genresList');
+    const resultsEl = document.getElementById('results');
+
+    function renderGenres() {
+      genresList.innerHTML = '';
+      const allBox = makeGenreBox('All', PRODUCTS.length);
+      allBox.classList.add('active');
+      genresList.appendChild(allBox);
+      genres.forEach(g => genresList.appendChild(makeGenreBox(g, genreCounts[g])));
+    }
+
+    function makeGenreBox(name, count) {
+      const el = document.createElement('div');
+      el.className = 'genre';
+      el.innerHTML = `<div class="title">${name}</div><div class="count">${count} products</div>`;
+      el.addEventListener('click', () => {
+        document.querySelectorAll('.genre').forEach(x => x.classList.remove('active'));
+        el.classList.add('active');
+        applyFilter(name === 'All' ? null : name);
+      });
+      return el;
+    }
+
+    function renderResults(list) {
+      resultsEl.innerHTML = '';
+      if (list.length === 0) {
+        resultsEl.innerHTML = '<p>No products found.</p>';
+        return;
+      }
+      list.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `<h3>${p.name}</h3><div class="meta"><div class="rating">★ ${p.rating}</div><div>${p.genre} — ${p.ratingsCount} ratings</div></div><p>${p.desc}</p>`;
+        resultsEl.appendChild(card);
+      });
+    }
+
+    function applyFilter(genre = null) {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = PRODUCTS.filter(p => {
+        const matchesQuery = !query || p.name.toLowerCase().includes(query) || p.brand.toLowerCase().includes(query);
+        const matchesGenre = !genre || p.genre === genre;
+        return matchesQuery && matchesGenre;
+      });
+      renderResults(filtered);
+    }
+
+    document.getElementById('searchBtn').addEventListener('click', () => applyFilter());
+    document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') applyFilter(); });
+    document.getElementById('avatarBtn').addEventListener('click', () => document.getElementById('profileMenu').classList.toggle('active'));
+
+    renderGenres();
+    renderResults(PRODUCTS);
+  </script>
+</body>
+</html>
