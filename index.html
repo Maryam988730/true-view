@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Product Review Hub</title>
+  <title>True View</title>
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
     :root {
       --bg: #f9fafb;
       --card: #fff;
-      --accent: #2563eb;
+      --accent: #ec5718;
       --text: #1f2937;
       --muted: #6b7280;
       --border: #e5e7eb;
@@ -29,16 +29,31 @@
       padding: 40px;
     }
 
-    .app { width: 100%; max-width: 1000px; }
+    .app { width: 100%; max-width: 1000px; text-align: center; position: relative; }
 
     header {
       display: flex;
-      justify-content: space-between;
+      flex-direction: column;
       align-items: center;
-      margin-bottom: 30px;
+      margin-top: 80px;
+      margin-bottom: 60px;
+      position: relative;
     }
 
-    .logo h1 { margin: 0; font-size: 1.5rem; color: var(--accent); }
+    .logo h1 {
+      margin: 0 0 40px 0;
+      font-size: 4rem;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .top-bar {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      width: 100%;
+    }
 
     .search-wrap {
       display: flex;
@@ -68,6 +83,12 @@
       font-weight: 500;
     }
 
+    .profile {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+    }
+
     .avatar {
       width: 42px;
       height: 42px;
@@ -84,12 +105,13 @@
     .profile-menu {
       position: absolute;
       right: 0;
-      top: 55px;
+      top: 50px;
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       display: none;
+      text-align: left;
     }
 
     .profile-menu.active { display: block; }
@@ -108,50 +130,87 @@
 
     .genres {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 16px;
-      margin-bottom: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+      margin-bottom: 40px;
     }
 
     .genre {
       background: var(--card);
-      border: 1px solid var(--border);
+      border: 2px solid var(--border);
       border-radius: var(--radius);
-      padding: 16px;
+      padding: 30px 20px;
       text-align: center;
       cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
+      transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+      font-size: 1.2rem;
+      box-shadow: var(--shadow);
+    }
+
+    .genre .title {
+      font-weight: 700;
+      margin-bottom: 4px;
     }
 
     .genre:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
-
     .genre.active { border-color: var(--accent); }
 
     .card {
       background: var(--card);
       border-radius: var(--radius);
-      padding: 20px;
+      padding: 14px 16px;
       border: 1px solid var(--border);
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       box-shadow: var(--shadow);
+      text-align: left;
+      font-size: 0.95rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
     }
 
-    .card h3 { margin: 0 0 6px 0; }
+    .card img {
+      width: 90px;
+      height: 90px;
+      object-fit: cover;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: #f3f4f6;
+    }
+
+    .card-content {
+      flex: 1;
+    }
+
+    .card h3 {
+      margin: 0 0 4px 0;
+      font-size: 1.1rem;
+    }
 
     .meta {
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: var(--muted);
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
+      margin-bottom: 6px;
     }
 
-    .rating {
-      background: #f3f4f6;
-      padding: 4px 8px;
+    .vote-btn {
+      cursor: pointer;
+      border: 1px solid var(--border);
       border-radius: 6px;
-      color: var(--accent);
+      padding: 2px 6px;
+      background: #f3f4f6;
       font-weight: 600;
+      user-select: none;
+      transition: background 0.2s, transform 0.1s;
+    }
+
+    .vote-btn:hover {
+      background: var(--accent);
+      color: #fff;
+      transform: scale(1.1);
     }
 
     footer { text-align: center; color: var(--muted); margin-top: 40px; }
@@ -159,18 +218,21 @@
 </head>
 <body>
   <div class="app">
+    <div class="profile">
+      <div id="avatarBtn" class="avatar">U</div>
+      <div id="profileMenu" class="profile-menu">
+        <button>My Profile</button>
+        <button>Settings</button>
+        <button>Logout</button>
+      </div>
+    </div>
+
     <header>
       <div class="logo"><h1>True View</h1></div>
-      <div class="search-wrap">
-        <input id="searchInput" placeholder="Search products..." />
-        <button class="search-btn" id="searchBtn">Search</button>
-      </div>
-      <div class="profile">
-        <div id="avatarBtn" class="avatar">U</div>
-        <div id="profileMenu" class="profile-menu">
-          <button>My Profile</button>
-          <button>Settings</button>
-          <button>Logout</button>
+      <div class="top-bar">
+        <div class="search-wrap">
+          <input id="searchInput" placeholder="Search products..." />
+          <button class="search-btn" id="searchBtn">Search</button>
         </div>
       </div>
     </header>
@@ -178,42 +240,41 @@
     <main>
       <section class="genres" id="genresList"></section>
       <section id="results"></section>
-      <footer>© 2025 Product Review Hub</footer>
+      <footer>© 2025 True View</footer>
     </main>
   </div>
 
   <script>
     const PRODUCTS = [
-      {id:1,name:'Smartphone X200',brand:'TechCorp',genre:'Electronics',rating:4.6,ratingsCount:245,desc:'High-end smartphone with excellent camera and performance.'},
-      {id:2,name:'Luxe Skin Serum',brand:'GlowCo',genre:'Cosmetics',rating:4.4,ratingsCount:182,desc:'Hydrating serum that improves skin texture and radiance.'},
-      {id:3,name:'Noise-Cancel 500',brand:'AudioMax',genre:'Electronics',rating:4.7,ratingsCount:310,desc:'Over-ear headphones with deep bass and noise cancellation.'},
-      {id:4,name:'Ergo Chair Pro',brand:'SitWell',genre:'Furniture',rating:4.5,ratingsCount:127,desc:'Adjustable ergonomic office chair with lumbar support.'},
-      {id:5,name:'FreshClean Toothbrush',brand:'SmilePro',genre:'Personal Care',rating:4.2,ratingsCount:98,desc:'Electric toothbrush with smart timer and long battery life.'},
-      {id:6,name:'PureBlend Mixer',brand:'HomeEase',genre:'Appliances',rating:4.3,ratingsCount:156,desc:'Durable kitchen blender with multiple speed settings.'}
+      {id:1,name:'Smartphone X200',brand:'TechCorp',genre:'Electronics',upvotes:12,downvotes:2,desc:'High-end smartphone with excellent camera and performance.',image:'https://via.placeholder.com/90'},
+      {id:2,name:'Luxe Skin Serum',brand:'GlowCo',genre:'Cosmetics',upvotes:8,downvotes:1,desc:'Hydrating serum that improves skin texture and radiance.',image:'https://via.placeholder.com/90'},
+      {id:3,name:'Noise-Cancel 500',brand:'AudioMax',genre:'Electronics',upvotes:15,downvotes:3,desc:'Over-ear headphones with deep bass and noise cancellation.',image:'https://via.placeholder.com/90'},
+      {id:4,name:'Ergo Chair Pro',brand:'SitWell',genre:'Furniture',upvotes:7,downvotes:0,desc:'Adjustable ergonomic office chair with lumbar support.',image:'https://via.placeholder.com/90'},
+      {id:5,name:'FreshClean Toothbrush',brand:'SmilePro',genre:'Personal Care',upvotes:5,downvotes:2,desc:'Electric toothbrush with smart timer and long battery life.',image:'https://via.placeholder.com/90'}
     ];
 
-    const genreCounts = PRODUCTS.reduce((acc, p) => { acc[p.genre] = (acc[p.genre] || 0) + 1; return acc; }, {});
-    const genres = Object.keys(genreCounts);
+    const genreCounts = PRODUCTS.reduce((acc, p) => {
+      acc[p.genre] = (acc[p.genre] || 0) + 1;
+      return acc;
+    }, {});
 
+    const genres = Object.keys(genreCounts);
     const genresList = document.getElementById('genresList');
     const resultsEl = document.getElementById('results');
 
     function renderGenres() {
       genresList.innerHTML = '';
-      const allBox = makeGenreBox('All', PRODUCTS.length);
-      allBox.classList.add('active');
-      genresList.appendChild(allBox);
       genres.forEach(g => genresList.appendChild(makeGenreBox(g, genreCounts[g])));
     }
 
     function makeGenreBox(name, count) {
       const el = document.createElement('div');
       el.className = 'genre';
-      el.innerHTML = `<div class="title">${name}</div><div class="count">${count} products</div>`;
+      el.innerHTML = `<div class="title">${name}</div><div class="count" style="font-size:0.9rem;color:var(--muted);">${count} products</div>`;
       el.addEventListener('click', () => {
         document.querySelectorAll('.genre').forEach(x => x.classList.remove('active'));
         el.classList.add('active');
-        applyFilter(name === 'All' ? null : name);
+        applyFilter(name);
       });
       return el;
     }
@@ -224,27 +285,51 @@
         resultsEl.innerHTML = '<p>No products found.</p>';
         return;
       }
-      list.forEach(p => {
+      list.forEach((p, index) => {
         const card = document.createElement('div');
         card.className = 'card';
-        card.innerHTML = `<h3>${p.name}</h3><div class="meta"><div class="rating">★ ${p.rating}</div><div>${p.genre} — ${p.ratingsCount} ratings</div></div><p>${p.desc}</p>`;
+        card.innerHTML = `
+          <img src="${p.image}" alt="${p.name}">
+          <div class="card-content">
+            <h3>${p.name}</h3>
+            <div class="meta">
+              <div class="vote-btn" id="up-${index}">👍 ${p.upvotes}</div>
+              <div class="vote-btn" id="down-${index}">👎 ${p.downvotes}</div>
+              <div>${p.genre}</div>
+            </div>
+            <p>${p.desc}</p>
+          </div>`;
         resultsEl.appendChild(card);
+
+        // Vote button events
+        document.getElementById(`up-${index}`).addEventListener('click', () => {
+          p.upvotes++;
+          renderResults(list);
+        });
+        document.getElementById(`down-${index}`).addEventListener('click', () => {
+          p.downvotes++;
+          renderResults(list);
+        });
       });
     }
 
-    function applyFilter(genre = null) {
+    function applyFilter(genre) {
       const query = document.getElementById('searchInput').value.toLowerCase();
       const filtered = PRODUCTS.filter(p => {
         const matchesQuery = !query || p.name.toLowerCase().includes(query) || p.brand.toLowerCase().includes(query);
-        const matchesGenre = !genre || p.genre === genre;
+        const matchesGenre = p.genre === genre;
         return matchesQuery && matchesGenre;
       });
       renderResults(filtered);
     }
 
     document.getElementById('searchBtn').addEventListener('click', () => applyFilter());
-    document.getElementById('searchInput').addEventListener('keydown', e => { if (e.key === 'Enter') applyFilter(); });
-    document.getElementById('avatarBtn').addEventListener('click', () => document.getElementById('profileMenu').classList.toggle('active'));
+    document.getElementById('searchInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') applyFilter();
+    });
+    document.getElementById('avatarBtn').addEventListener('click', () =>
+      document.getElementById('profileMenu').classList.toggle('active')
+    );
 
     renderGenres();
     renderResults(PRODUCTS);
